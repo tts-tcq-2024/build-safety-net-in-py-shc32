@@ -1,36 +1,51 @@
-def get_soundex_code(c):
-    c = c.upper()
-    mapping = {
-        'B': '1', 'F': '1', 'P': '1', 'V': '1',
-        'C': '2', 'G': '2', 'J': '2', 'K': '2', 'Q': '2', 'S': '2', 'X': '2', 'Z': '2',
-        'D': '3', 'T': '3',
-        'L': '4',
-        'M': '5', 'N': '5',
-        'R': '6'
-    }
-    return mapping.get(c, '0')  # Default to '0' for non-mapped characters
-
 def generate_soundex(name):
     if not name:
         return ""
 
-    # Step 1: Start with the first letter (capitalized)
-    soundex = name[0].upper()
-    prev_code = get_soundex_code(soundex)
+    soundex = initialize_soundex(name)
+    soundex = process_name_for_soundex(name, soundex)
+    soundex = pad_soundex(soundex)
 
-    # Step 2: Iterate through the remaining characters in the name
+    return soundex
+
+def initialize_soundex(name):
+    # Start with the first letter (capitalized)
+    return name[0].upper() if name else ""
+
+def process_name_for_soundex(name, soundex):
+    if not soundex:
+        return soundex
+    
+    prev_code = get_soundex_code(soundex)
     for char in name[1:]:
         code = get_soundex_code(char)
         if code != '0' and code != prev_code:
             soundex += code
             prev_code = code
-        
-        # Step 3: Break loop if the soundex is already 4 characters long
         if len(soundex) == 4:
             break
-
-    # Step 4: Pad with zeros if necessary
-    soundex = soundex.ljust(4, '0')
-
     return soundex
+
+def pad_soundex(soundex):
+    # Pad with zeros if necessary
+    return soundex.ljust(4, '0')
+
+def get_soundex_code(char):
+    # Define your logic here to get the Soundex code for a given character
+    # Example implementation:
+    # (For simplicity, assuming all non-'a-z' characters return '0')
+    if char.lower() in 'aeiouyhw':
+        return '0'
+    
+    mapping = {
+        'b': '1', 'f': '1', 'p': '1', 'v': '1',
+        'c': '2', 'g': '2', 'j': '2', 'k': '2', 'q': '2',
+        's': '2', 'x': '2', 'z': '2',
+        'd': '3', 't': '3',
+        'l': '4',
+        'm': '5', 'n': '5',
+        'r': '6'
+    }
+    return mapping.get(char.lower(), '0')
+
 
