@@ -27,9 +27,15 @@ def process_name_for_soundex(name, soundex):
 def add_code_and_update_prev_code(char, soundex, prev_code):
     code = get_soundex_code(char)
     if should_add_code(code, prev_code) and not is_soundex_complete(soundex):
-        soundex += code
-        prev_code = code
+        soundex = append_code(soundex, code)
+        prev_code = update_prev_code(prev_code, code)
     return prev_code
+
+def append_code(soundex, code):
+    return soundex + code
+
+def update_prev_code(prev_code, code):
+    return code if should_add_code(code, prev_code) else prev_code
 
 def should_add_code(code, prev_code):
     return code != '0' and code != prev_code
