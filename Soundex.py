@@ -17,8 +17,15 @@ def process_name_for_soundex(name, soundex):
         return soundex
     
     soundex_code = get_soundex_code(soundex)
-    soundex = generate_soundex(name[1:], soundex, soundex_code)
+    soundex = generate_soundex_to_process_name(name[1:], soundex, soundex_code)
     
+    return soundex
+
+def generate_soundex_to_process_name(name, soundex, initial_code):
+    for char in name:
+        initial_code = add_code_and_update_prev_code(char, soundex, initial_code)
+        if is_soundex_complete(soundex):
+            break
     return soundex
 
 def add_code_and_update_prev_code(char, soundex, prev_code):
