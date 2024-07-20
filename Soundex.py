@@ -1,41 +1,33 @@
-def remove_vowels_except_first_letter(word):
-    if not word:
-        return ''
-    
-    first_letter = word[0]
-    return first_letter + ''.join(char for char in word[1:] if char not in 'aeiouyhw')
-
-def encode_consonants(word):
+def get_soundex_code(c):
+    c = c.upper()
     mapping = {
-        'b': '1', 'f': '1', 'p': '1', 'v': '1',
-        'c': '2', 'g': '2', 'j': '2', 'k': '2', 'q': '2',
-        's': '2', 'x': '2', 'z': '2',
-        'd': '3', 't': '3',
-        'l': '4',
-        'm': '5', 'n': '5',
-        'r': '6'
+        'B': '1', 'F': '1', 'P': '1', 'V': '1',
+        'C': '2', 'G': '2', 'J': '2', 'K': '2', 'Q': '2', 'S': '2', 'X': '2', 'Z': '2',
+        'D': '3', 'T': '3',
+        'L': '4',
+        'M': '5', 'N': '5',
+        'R': '6'
     }
-    
-    first_letter = word[0]
-    encoded = [first_letter]
-    for char in word[1:]:
-        digit = mapping.get(char)
-        if digit and (not encoded or digit != encoded[-1]):
-            encoded.append(digit)
-    
-    return encoded
+    return mapping.get(c, '0')  # Default to '0' for non-mapped characters
 
-def remove_duplicate_adjacent_digits(encoded):
-    return [char for i, char in enumerate(encoded) if i == 0 or char != encoded[i-1]]
 
-def soundex(word):
-    if not word:
-        return None
-    
-    word = word.lower()
-    word = remove_vowels_except_first_letter(word)
-    encoded = encode_consonants(word)
-    encoded = remove_duplicate_adjacent_digits(encoded)
-    encoded = (encoded + ['0', '0', '0'])[:4]
-    
-    return ''.join(encoded)
+def generate_soundex(name):
+    if not name:
+        return ""
+
+    # Start with the first letter (capitalized)
+    soundex = name[0].upper()
+    prev_code = get_soundex_code(soundex)
+
+    for char in name[1:]:
+        code = get_soundex_code(char)
+        if code != '0' and code != prev_code:
+            soundex += code
+            prev_code = code
+        if len(soundex) == 4:
+            break
+
+    # Pad with zeros if necessary
+    soundex = soundex.ljust(4, '0')
+
+    return soundex
