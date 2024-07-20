@@ -18,23 +18,17 @@ def process_name_for_soundex(name, soundex):
     
     prev_code = get_soundex_code(soundex)
     for char in name[1:]:
-        soundex = add_code_if_needed(char, soundex, prev_code)
+        prev_code = add_code_and_update_prev_code(char, soundex, prev_code)
         if is_soundex_complete(soundex):
             break
-        prev_code = update_prev_code(char, prev_code)
     
     return soundex
 
-def add_code_if_needed(char, soundex, prev_code):
+def add_code_and_update_prev_code(char, soundex, prev_code):
     code = get_soundex_code(char)
     if should_add_code(code, prev_code) and not is_soundex_complete(soundex):
         soundex += code
-    return soundex
-
-def update_prev_code(char, prev_code):
-    code = get_soundex_code(char)
-    if should_add_code(code, prev_code):
-        return code
+        prev_code = code
     return prev_code
 
 def should_add_code(code, prev_code):
