@@ -19,12 +19,18 @@ def process_name_for_soundex(name, soundex):
     prev_code = get_soundex_code(soundex)
     for char in name[1:]:
         code = get_soundex_code(char)
-        if code != '0' and code != prev_code:
+        if should_add_code(code, prev_code):
             soundex += code
             prev_code = code
-        if len(soundex) == 4:
+        if is_soundex_complete(soundex):
             break
     return soundex
+
+def should_add_code(code, prev_code):
+    return code != '0' and code != prev_code
+
+def is_soundex_complete(soundex):
+    return len(soundex) == 4
 
 def pad_soundex(soundex):
     # Pad with zeros if necessary
