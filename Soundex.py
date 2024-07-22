@@ -9,7 +9,7 @@ def generate_soundex(name):
     return soundex
 
 def initialize_soundex(name):
-    # Start with the first letter (capitalized)
+    # Starting with the first letter in capitals
     return name[0].upper() if name else ""
 
 def process_name_for_soundex(name, soundex):
@@ -52,9 +52,6 @@ def pad_soundex(soundex):
     return soundex.ljust(4, '0')
 
 def get_soundex_code(char):
-    # Define your logic here to get the Soundex code for a given character
-    # Example implementation:
-    # (For simplicity, assuming all non-'a-z' characters return '0')
     if char.lower() in 'aeiouyhw':
         return '0'
     
