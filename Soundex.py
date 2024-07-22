@@ -18,6 +18,9 @@ def generate_soundex(name):
     soundex = pad_soundex(soundex)
     return soundex
 
+def should_add_code(code, prev_code):
+    return code != '0' and code != prev_code
+
 def pad_soundex(soundex):
     return soundex.ljust(4, '0')
 
